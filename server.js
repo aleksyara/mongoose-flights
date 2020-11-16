@@ -8,6 +8,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+require('./config/database'); // require our db file to establish our connection
+// we don't need to save it to a variable because all we want is the code in that file 
+// to run 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
