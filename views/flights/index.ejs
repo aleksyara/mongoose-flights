@@ -8,9 +8,10 @@
           <th>Depart</th>
           <th></th>
         </tr>
+     
     </thead>
      <tbody>
-    <% flights.forEach(function(f) { %>
+       <% flights.forEach(function(f) { %>
         <tr>
           <td><%= f.airline %></td>
           <td><%= f.airport %></td>
@@ -19,7 +20,7 @@
           <td><a href="/flights/<%= f._id %>">DETAILS</a></td>
         </tr>
         <% }); %>
-    </tbody>
-</table>
-
+      </tbody>
+    </table>
+<img src="/images/IMG_8589.jpg">
 <%- include('../partials/footer') %>
