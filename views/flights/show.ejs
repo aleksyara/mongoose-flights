@@ -12,4 +12,46 @@
     
 </section>
 
+<!-- implementing destinations  -->
+<br><br><h2>Destinations</h2>
+<form id="add-destination-form" method="POST"
+  action="/flights/<%= flight._id %>/destinations">
+  <label>Destintion Airport:</label>
+  <select name="airport">
+    <option value="AUS">AUS</option>
+    <option value="DFW">DFW</option>
+    <option value="DEN">DEN</option>
+    <option value="LAX">LAX</option>
+    <option value="SAN">SAN</option>
+  </select>
+
+  
+  <label>Arrival:</label>
+  <input type="date" name="departs">
+  <input type="submit" value="Add Destinations">
+</form>
+
+<% if (flight.destinations.length) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Review</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+     <tbody>
+          <% flight.destinations.forEach(function(d) { %>
+          <% total += d.enum %>
+          <tr>
+            <td><%= d.createdAt.toLocaleDateString() %></td>
+          </tr>
+        <% }); %>
+     </tbody>
+    </table>
+  <% } else { %>
+    <h5>No Destinations Yet</h5>
+  <% } %>
+
+
 <%- include('../partials/footer') %>
