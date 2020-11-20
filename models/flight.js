@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const destinationSchema = new Schema({
-  airportDestination: {
+  airport: {
     type: String,
+    required: true,
     enum: ['AUS', 'DFW', 'DEN', 'LAX', 'SAN'],
   }, 
   arrival: {
+    required: true,
     type: Date
   }
 });
@@ -31,8 +33,7 @@ const flightSchema = new Schema({
     type: Date
   },
   destinations: [destinationSchema],
-  arrival: [destinationSchema]
-  
+  tickets: [{type: Schema.Types.ObjectId, ref: 'Ticket'}]
 });
 
 module.exports = mongoose.model ('Flight', flightSchema);

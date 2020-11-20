@@ -1,8 +1,9 @@
 const Ticket = require('../models/ticket');
 const Flight = require('../models/flight');
+const moment = require('moment');
 
 module.exports = {
-  new: newTicket,
+  prepareToByTicket,
   create,
 };
 
@@ -19,11 +20,18 @@ function create(req, res) {
     });
   }
   
-  function newTicket(req, res) {
-    Ticket.find({}, function (err, tickets) {
-      res.render('tickets/new', {
-        title: 'Add Ticket',
-        tickets
+  function prepareToByTicket(req, res) {
+    console.log('this is req.body: ', req.body);
+    Flight.findById(req.params.id, function(err, myFlight) { //flight is my model
+      let formattedDate = moment(myFlight.departs).format('lll');
+      console.log('formattedDate: ', formattedDate);
+      let flight = JSON.parse(JSON.stringify(myFlight));
+      flight.destinations.map((elem) => {
+        return elem.arrival = moment(elem.arrival).format('lll');
       });
-    })
+      flight.departs = formattedDate;
+      console.log('formattedFlight: ', flight);
+      console.log(flight, ' <============ flight in show page');
+      res.render('tickets/new-ticket', { title: 'Buy Ticket', flight });
+    });
   }

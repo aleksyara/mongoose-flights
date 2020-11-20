@@ -10,10 +10,29 @@
     <div>Depart: </div>
     <div><%= flight.departs %></div>
     
+    <table id="list-of-destinations">
+      <thead>
+        <tr>
+          <th>Airport</th>
+          <th>Arival Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flight.destinations.forEach(function(d) { %>
+        <tr>
+          <td><%= d.airport %></td>
+          <td><%= d.arrival %></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
 </section>
 
+
+<button><a href="/tickets/new/<%= flight._id %>">ADD TICKET</a></button>
+
 <!-- implementing destinations  -->
-<br><br><h2>Destinations</h2>
+<br><br><h2>Add New Destination</h2>
 <form id="add-destination-form" method="POST"
   action="/flights/<%= flight._id %>/destinations">
   <label>Destintion Airport:</label>
@@ -27,7 +46,7 @@
 
   
   <label>Arrival:</label>
-  <input type="date" name="departs">
+  <input type="date" name="arrival">
   <input type="submit" value="Add Destinations">
 </form>
 

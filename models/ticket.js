@@ -6,10 +6,9 @@ const ticketSchema = new Schema({
        type: String,
        match: /[A-F][1-9]\d?/},
    price: {
-       type: Number
-   },
-   flight: {
-
+       type: Number,
+       min: 0,
+       required: true
    }
 });
 

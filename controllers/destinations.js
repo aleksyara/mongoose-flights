@@ -5,8 +5,12 @@ const Flight = require('../models/flight');
  };
 
  function create(req, res) {
+   console.log('req.body: ',req.body);
     Flight.findById(req.params.id, function(err, flight) {
+      console.log('flight: ', flight);
+      console.log('flight.destinations: ', flight.destinations);
       flight.destinations.push(req.body);
+      console.log('flight.destinations: ', flight.destinations)
       flight.save(function(err) {
         res.redirect(`/flights/${flight._id}`);
       });
