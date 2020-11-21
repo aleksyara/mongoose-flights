@@ -1,33 +1,41 @@
 <%- include('../partials/header') %>
 
-<p>This is flight from <%- flight.airport %></p>
+<section id="show-page">
+  <div>Airline:  </div>
+  <div><%= flight.airline %></div>
+  <div>Airport: </div>
+  <div><%= flight.airport %></div>
+  <div>FlightNo: </div>
+  <div><%= flight.flightNo %></div>
+  <div>Depart: </div>
+  <div><%= flight.departs %></div>
+  
+  <table id="list-of-destinations">
+    <thead>
+      <tr>
+        <th>Airport</th>
+        <th>Arival Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% flight.destinations.forEach(function(d) { %>
+      <tr>
+        <td><%= d.airport %></td>
+        <td><%= d.arrival %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</section>
 
-<form id="new-ticket-form" action="/tickets" method="POST">
-    <label>Airline:</label>
-    <select name="airline">
-      <option value="American">American</option>
-      <option value="Southwest">Southwest</option>
-      <option value="United">United</option>
-    </select>
-    <br>
-    <label>Airport:</label>
-    <select name="airport">
-      <option value="AUS">AUS</option>
-      <option value="DFW">DFW</option>
-      <option value="DEN">DEN</option>
-      <option value="LAX">LAX</option>
-      <option value="SAN">SAN</option>
-    </select>
-    <br>
-    <label>FlightNumber</label>
-    <input type="number" min="10" max="9999" name="flightNo">
-    <br>
-    <label>Departure:</label>
-    <input type="date" name="departs">
-    <br>
-    <button type="submit">Add Flight</button>
-    </form>
-
-
+<form id="new-ticket-form" action="/flights/<%= flight._id %>/tickets" method="POST">
+  <label>Seat:</label>
+  <input name="seat" placeholder="A11" required pattern="[A-F][1-9]\d?">
+  <br>
+  <label>Price:</label>
+  <input type="number" min="0" name="price" required min="0" max="999999" step="0.01" size="6">
+  <br>
+  <button type="submit">Add Ticket</button>
+</form>
 
 <%- include('../partials/footer') %>
