@@ -26,6 +26,23 @@
         <% }); %>
       </tbody>
     </table>
+    <br>
+    <table id="list-of-tickets">
+      <thead>
+        <tr>
+          <th>Seat</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flight.tickets.forEach(function(t) { %>
+        <tr>
+          <td><%= t.seat %></td>
+          <td><%= t.price %></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
 </section>
 
 

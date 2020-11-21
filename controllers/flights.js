@@ -1,5 +1,8 @@
 const Flight = require('../models/flight');
+const Ticket = require('../models/ticket');
 const moment = require('moment');
+const DateFormatter = require('../utils/date-fomratter');
+const CurrencyFormatter = require('../utils/currency-formatter');
 
 module.exports = {
     index: index,
@@ -9,25 +12,37 @@ module.exports = {
   };
   
   function index(req, res) {
-    Flight.find({}, function(err, flights) {
+    Flight.find({}, function(err, myFlights) {
+      let flights = JSON.parse(JSON.stringify(myFlights));
+      flights = DateFormatter.formatFlightDepartureDates(flights);
       console.log(flights, ' <============ flights in show page')
       res.render('flights/index', { title: 'All Flights', flights });
     });
   }
   
   function show(req, res) {
-    console.log('req.params.id: ', req.params.id);
-    Flight.findById(req.params.id, function(err, myFlight) { //flight is my model
-      let formattedDate = moment(myFlight.departs).format('lll');
-      console.log('formattedDate: ', formattedDate);
-      let flight = JSON.parse(JSON.stringify(myFlight));
-      flight.destinations.map((elem) => {
-        return elem.arrival = moment(elem.arrival).format('lll');
-      });
-      flight.departs = formattedDate;
-      console.log('formattedFlight: ', flight);
-      console.log(flight, ' <============ flight in show page');
-      res.render('flights/show', { title: 'Flight Detail', flight });
+    
+    CurrencyFormatter.formatDollarAmount('1000.7898');
+    Flight.findById(req.params.id, function(err1, myFlight) { //flight is my model
+
+      if (!err1 && myFlight) {
+        let flight = JSON.parse(JSON.stringify(myFlight));
+        let formattedDate = DateFormatter.formatFlightDepartureDate(myFlight.departs);
+        flight.destinations = DateFormatter.formatDestinationDates(flight.destinations);
+        flight.departs = formattedDate;
+
+        Ticket.find({'_id': {$in: myFlight.tickets}}, function(err2, myTickets) {
+          
+          if (!err2 && myTickets) {
+            let tickets = JSON.parse(JSON.stringify(myTickets));
+            tickets = CurrencyFormatter.formatDollarAmountInTickets(tickets);
+            flight.tickets = tickets;
+          }
+          console.log(flight, ' <============ flight in show page');
+          res.render('flights/show', { title: 'Flight Detail', flight });
+
+        });
+      }
     });
   }
 
@@ -36,11 +51,6 @@ module.exports = {
   }
 
   function create(req, res) {
-    console.log('*******');
-    console.log('req.body: ', req.body);
-    console.log('req.body.departs: ', req.body.departs);
-    console.log('typeof req.body.departs: ', typeof req.body.departs);
-  
     const flight = new Flight(req.body);
     if (req && req.body && req.body.departs === '') {
       let date = new Date();
@@ -49,8 +59,6 @@ module.exports = {
       let day = date.getDate();
       flight.departs = new Date(year + 1, month, day);
     }
-
-    console.log('flight: ', flight);
     
     flight.save(function(err) {
       console.log('This is error: ', err);
